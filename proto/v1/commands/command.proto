@@ -1,0 +1,120 @@
+/*
+ * SNMP Protobuf.
+ *
+ * A protobuf interface to SNMP functions.
+ */
+syntax = "proto3";
+option go_package = "github.com/Akashkumar-Jeyaramans/snmpGrpcHttp/proto";
+package thebinary.snmp;
+import "google/api/annotations.proto";
+/*
+ * Asn1Ber Enum Type definitions
+ */
+enum Asn1BER {
+    option allow_alias = true;
+    EndOfContents = 0x0;
+    UnknownType = 0x0;
+    Boolean = 0x1;
+    Integer = 0x02;
+    BitString = 0x03;
+    OctetString = 0x04;
+    Null = 0x05;
+    ObjectIdentifier = 0x06;
+    ObjectDescription = 0x07;
+    IPAddress = 0x40;
+    Counter32 = 0x41;
+    Gauge32 = 0x42;
+    TimeTicks = 0x43;
+    Opaque = 0x44;
+    NsapAddress = 0x45;
+    Counter64 = 0x46;
+    Uinteger32 = 0x47;
+    OpaqueFloat = 0x78;
+    OpaqueDouble = 0x79;
+    NoSuchObject = 0x80;
+    NoSuchInstance = 0x81;
+    EndOfMibView = 0x82;
+}
+
+/*
+ * Represents SNMP OID.
+ */
+message Oid {
+  string oid = 1; // SNMP OID
+}
+
+/*
+ * Represents list of SNMP Oids
+ */
+message OidList {
+  repeated string oids = 1; // List of SNMP OIDs
+}
+
+/*
+ * Represents a single SNMP PDU
+ * consisting of oid, type and a value.
+ *
+ * The value is in any one of the following fields,
+ * determined by the type of value it stores.
+ */
+message SnmpPDU {
+  string Name = 1; // OID
+  Asn1BER Type = 2; // PDU Type (Asn1BER encoding type)
+  oneof Value {
+    int32 I32 = 3; // Stores 32-bit integer
+    int64 I64 = 4; // Stores 64-bit signed integer
+    uint32 UI32 = 5; // Stores 32-bit unsigned integer
+    uint64 UI64 = 6; // Stores 64-bit unsigned integer
+    string Str = 7; // Stores string
+  }
+}
+
+/*
+ * Represents multiple SNMP PDU
+ */
+message SnmpPDUs {
+  repeated SnmpPDU pdus = 1;
+}
+
+message SnmpPacket {
+  uint32 Error = 1;
+  repeated SnmpPDU Variable = 2;
+}
+
+/*
+ * 
+ *
+ */
+service Command {
+  //SNMP Get given the list of OIDs
+  rpc Get(OidList) returns (SnmpPacket) {
+ option (google.api.http)={
+        post : "/echo"
+        body : "*"
+    };
+  };
+
+  //SNMP Set
+ // rpc Set(SnmpPDUs) returns (SnmpPacket) {
+ //option (google.api.http)={
+ //       post : "/echo"
+ //       body : "*"
+ //   };
+ // };
+
+  //SNMP Walk and return all variables in one shot
+  //rpc Walk(Oid) returns (SnmpPDUs) {
+ //option (google.api.http)={
+   //     post : "/echo"
+     //   body : "*"
+    //};
+ // };
+
+  //Stream each SNMP PDU while running SNMP WALK from the given OID.
+  //rpc StreamWalk(Oid) returns (stream SnmpPDU) {
+    //option (google.api.http)={
+      //  post : "/echo"
+        //body : "*"
+    //};
+  //};
+}
