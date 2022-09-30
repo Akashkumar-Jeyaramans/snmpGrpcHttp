@@ -8,30 +8,23 @@ package command;
 import "google/api/annotations.proto";
 
 
-message Oid{
-    string oid = 1;
-}
 
-message Target{
-    string target =1;
-}
 
 message GetRequest{
-    repeated Target tar = 1;
-    repeated Oid oi = 2;
+   string target = 1;
+   string oid = 2;
 }
 
 
 message GetResponse{
     string Name = 1;
-    repeated Oid oi =2;
-    string value =3;
+    string value = 2;
 }
 
 service GetCommand{
     rpc Get(GetRequest) returns (GetResponse){
         option(google.api.http)={
-            post : "/echo"
+            post : "/v1/snmp/get"
             body : "*"
         };
     };

@@ -79,7 +79,7 @@ func RegisterGetCommandHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/command.GetCommand/Get", runtime.WithHTTPPathPattern("/echo"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/command.GetCommand/Get", runtime.WithHTTPPathPattern("/v1/snmp/get"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -143,7 +143,7 @@ func RegisterGetCommandHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/command.GetCommand/Get", runtime.WithHTTPPathPattern("/echo"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/command.GetCommand/Get", runtime.WithHTTPPathPattern("/v1/snmp/get"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -163,7 +163,7 @@ func RegisterGetCommandHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 }
 
 var (
-	pattern_GetCommand_Get_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"echo"}, ""))
+	pattern_GetCommand_Get_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "snmp", "get"}, ""))
 )
 
 var (
